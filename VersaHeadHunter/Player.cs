@@ -18,6 +18,8 @@ namespace VersaHeadHunter
         public string Progress;
         public string BattleNet;
         public string Description;
+        public string Realm; // TODO: add
+        public bool Transfer; // TODO: add
 
         public string GuildURL;
         public string GuildName;

@@ -16,7 +16,8 @@ namespace VersaHeadHunter
         public delegate void NewPlayerDataEventHandler(object sender, NewPlayerDataEventArgs e);
         public static event NewPlayerDataEventHandler NewPlayerData;
 
-        int postDelay = 18 * 60 * 60;
+        int postDelay = 18 * 60 * 60; // spam prevention delay (if orofile updated too often)
+        int outdatedThreshold = 24 * 60 * 60; // threshold to not post older players
         Timer timer = null;
         string url = null;
 
@@ -61,7 +62,8 @@ namespace VersaHeadHunter
                     if (Storage.Players.ContainsKey(url))
                         localPlayer = Storage.Players[url].FirstOrDefault(x => x.Name == p.Name);
 
-                    if (localPlayer == null || (localPlayer.Timestamp != p.Timestamp && int.Parse(p.Timestamp) - int.Parse(localPlayer.Timestamp) > postDelay))
+                    if ((localPlayer == null || (localPlayer.Timestamp != p.Timestamp && int.Parse(p.Timestamp) - int.Parse(localPlayer.Timestamp) > postDelay)) &&
+                        new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() - int.Parse(p.Timestamp) <= outdatedThreshold)
                     {
                         logger.Info($"New player data found for \"{p.Name}\"");
                         p.URL = new Uri(new Uri(url), p.URL).ToString();
@@ -76,7 +78,7 @@ namespace VersaHeadHunter
                         }
 
                         logger.Debug($"Sending player data via event invoke for \"{p.Name}\"");
-                        NewPlayerData?.Invoke(this, new NewPlayerDataEventArgs(p));
+                        NewPlayerData?.Invoke(this, new NewPlayerDataEventArgs(url, p));
                     }
                 }
 
@@ -93,7 +95,12 @@ namespace VersaHeadHunter
 
     public class NewPlayerDataEventArgs : EventArgs
     {
+        public string TrackerURL { get; }
         public Player Player { get; }
-        public NewPlayerDataEventArgs(Player player) => Player = player;
+        public NewPlayerDataEventArgs(string trackerUrl, Player player)
+        {
+            TrackerURL = trackerUrl;
+            Player = player;
+        }
     }
 }
