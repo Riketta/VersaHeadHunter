@@ -31,9 +31,9 @@ namespace VersaHeadHunter
             string guild = string.IsNullOrEmpty(GuildName) ? "without guild " : $"from \"{GuildName}\" with progress {GuildProgress} ";
             string description = string.IsNullOrEmpty(Description) ? "" : $"```fix\n{Description}```";
             string specs = string.IsNullOrEmpty(Specs) ? "" : $"{{{Specs}}} - ";
-            //string battlenet = string.IsNullOrEmpty(BattleNet) ? "" : $"({BattleNet}) ";
+            string battlenet = string.IsNullOrEmpty(BattleNet) ? "" : $" BattleNet: {BattleNet}";
 
-            return $"```apache\n{Name} ({Class} - {specs}{ilvl} - {Progress}) {guild}published.```{description}{URL}";
+            return $"```apache\n{Name} ({Class} - {specs}{ilvl} - {Progress}) {guild}published.{battlenet}```{description}{URL}";
         }
     }
 }

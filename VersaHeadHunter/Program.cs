@@ -12,7 +12,7 @@ namespace VersaHeadHunter
 
         // TODO: replace hardcoded stuff with config args
         // replace this with your realm address
-        private readonly static string url = "https://www.wowprogress.com/gearscore/eu/%D1%80%D0%B5%D0%B2%D1%83%D1%89%D0%B8%D0%B9-%D1%84%D1%8C%D0%BE%D1%80%D0%B4?lfg=1&raids_week=3&lang=&sortby=ts";
+        private readonly static string url = "https://www.wowprogress.com/gearscore/eu/%D1%80%D0%B5%D0%B2%D1%83%D1%89%D0%B8%D0%B9-%D1%84%D1%8C%D0%BE%D1%80%D0%B4?lfg=1&sortby=ts";
         private readonly static string token = "___";
         private readonly static ulong channelId = 649913439556206592; // channel used to post messages into
 

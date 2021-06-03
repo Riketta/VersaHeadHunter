@@ -16,8 +16,8 @@ namespace VersaHeadHunter
         public delegate void NewPlayerDataEventHandler(object sender, NewPlayerDataEventArgs e);
         public static event NewPlayerDataEventHandler NewPlayerData;
 
-        int postDelay = 18 * 60 * 60; // spam prevention delay (if orofile updated too often)
-        int outdatedThreshold = 24 * 60 * 60; // threshold to not post older players
+        int postDelay = 72 * 60 * 60; // spam prevention delay (if profile updated too often)
+        int outdatedThreshold = 24 * 60 * 60; // threshold to not post older players that was already published (like they went back from second page)
         Timer timer = null;
         string url = null;
 
