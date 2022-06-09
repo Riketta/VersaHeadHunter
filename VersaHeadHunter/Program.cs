@@ -21,7 +21,7 @@ namespace VersaHeadHunter
         };
         private readonly static string token = File.ReadAllText("token.txt");
         private readonly static ulong channelId = 649913439556206592; // channel used to post messages into
-        
+
         private readonly DiscordSocketClient _client;
 
         static void Main(string[] args)
