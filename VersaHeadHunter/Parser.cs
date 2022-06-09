@@ -64,14 +64,22 @@ namespace VersaHeadHunter
             if (descDiv != null)
                 player.Description = descDiv.InnerText;
 
-            List<HtmlNode> rawKilledBosses = doc.DocumentNode.Descendants()
-                .Where(x => x.Name == "span" && x.Attributes["class"] != null && x.Attributes["class"].Value.Contains("progress_heroic")).ToList();
+            int killedBosses = 0;
+            int totalBosses = 0;
+            var divRaidTier = doc.DocumentNode.Descendants().FirstOrDefault(x => x.Name == "div" && x.Attributes["id"] != null && x.Attributes["id"].Value.StartsWith("tier_"));
+            if (divRaidTier != null)
+            {
+                List<HtmlNode> rawKilledBosses = divRaidTier.Descendants()
+                    .Where(x => x.Name == "span" && x.Attributes["class"] != null && x.Attributes["class"].Value.Contains("progress_heroic")).ToList();
 
-            List<HtmlNode> rawTotalBosses = doc.DocumentNode.Descendants()
-                .Where(x => x.Name == "span" && x.Attributes["class"] != null
-                && (x.Attributes["class"].Value.Contains("progress_heroic") || x.Attributes["class"].Value.Contains("progress_normal") || x.Attributes["class"].Value.Contains("progress_none"))).ToList();
-
-            player.Progress = $"{rawKilledBosses.Count}/{rawTotalBosses.Count} (M)";
+                List<HtmlNode> rawTotalBosses = divRaidTier.Descendants()
+                    .Where(x => x.Name == "span" && x.Attributes["class"] != null
+                    && (x.Attributes["class"].Value.Contains("progress_heroic") || x.Attributes["class"].Value.Contains("progress_normal") || x.Attributes["class"].Value.Contains("progress_none"))).ToList();
+                
+                killedBosses = rawKilledBosses.Count;
+                totalBosses = rawTotalBosses.Count;
+            }
+            player.Progress = $"{killedBosses}/{totalBosses} (M)";
 
             player.Specs = doc.DocumentNode.Descendants().FirstOrDefault(x => x.Name == "div" && x.InnerText.StartsWith("Specs playing: "))?.InnerText.Replace("Specs playing: ", "");
             player.BattleNet = doc.DocumentNode.Descendants().FirstOrDefault(x => x.Name == "div" && x.InnerText.StartsWith("Battletag: "))?.InnerText.Replace("Battletag: ", "");
